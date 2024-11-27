@@ -1,0 +1,28 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.paymint'
+version = '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation project(':application')
+    implementation project(':infrastructure')
+    implementation project(':domain')
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "org.springframework.boot:spring-boot-starter-security"
+}
+
+bootJar {
+    mainClass.set('payment-api.boot.java.com.paymint.paymint_api.PayMintApiApplication')
+}
+
+test {
+    useJUnitPlatform()
+}
