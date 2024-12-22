@@ -17,7 +17,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
-        System.out.println(user.getNationalId());
         return null;
     }
 

@@ -1,4 +1,4 @@
-package com.paymint.dtos;
+package com.paymint.data.dtos;
 
 import java.time.LocalDate;
 

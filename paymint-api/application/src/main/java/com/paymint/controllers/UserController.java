@@ -1,62 +1,50 @@
 package com.paymint.controllers;
 
+import com.paymint.converters.UserRequestConverter;
 import com.paymint.models.entities.User;
-import com.paymint.models.valueobjects.*;
 import com.paymint.services.UserService;
-import com.paymint.dtos.UserDTO;
+import com.paymint.data.dtos.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@PreAuthorize("denyAll()")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping
+    @GetMapping("/getUsers")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
     public User getUserById(@PathVariable String id) {
         return userService.getUserById(id);
     }
 
-    @PostMapping
+    @PostMapping("/create")
+    @PreAuthorize("permitAll()")
     public User createUser(@RequestBody UserDTO userDTO) {
-        Address address = new Address(
-                userDTO.getStreet(),
-                userDTO.getCity(),
-                userDTO.getPostalCode(),
-                userDTO.getCountry()
-        );
-
-        User user = new User(
-                null,
-                new AccountStatus(userDTO.getAccountStatus()),
-                new DateOfBirth(userDTO.getDateOfBirth()),
-                new NationalId(userDTO.getNationalId()),
-                new Email(userDTO.getEmail()),
-                new Name(userDTO.getName()),
-                new Password(userDTO.getPassword()),
-                new PhoneNumber(userDTO.getPhoneNumber()),
-                address,
-                new Role(userDTO.getRole())
-        );
-        System.out.println( "aaaaa" + user.getNationalId().value());
+        User user = UserRequestConverter.userRequestToDomain(userDTO);
         return userService.createUser(user);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('USER')")
     public User updateUser(@PathVariable String id, @RequestBody User user) {
         return userService.updateUser(id, user);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
     }
