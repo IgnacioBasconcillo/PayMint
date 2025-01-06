@@ -4,10 +4,12 @@ import com.paymint.data.dtos.UserDTO;
 import com.paymint.models.entities.User;
 import com.paymint.models.valueobjects.*;
 
+import java.util.UUID;
+
 public class UserRequestConverter {
     public static User userRequestToDomain(UserDTO userRequest) {
         return new User(
-                null,
+                new UserId(UUID.randomUUID().toString()),
                 new AccountStatus(userRequest.getAccountStatus()),
                 new DateOfBirth(userRequest.getDateOfBirth()),
                 new NationalId(userRequest.getNationalId()),

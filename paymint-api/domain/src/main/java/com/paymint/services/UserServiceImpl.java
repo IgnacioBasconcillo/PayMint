@@ -1,13 +1,21 @@
 package com.paymint.services;
 
 import com.paymint.models.entities.User;
+import com.paymint.repositories.UserRepository;
 
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
+
+    private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Override
     public List<User> getAllUsers() {
-        return null;
+        return userRepository.getAllUsers();
     }
 
     @Override
@@ -17,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(User user) {
+        userRepository.createUser(user);
         return null;
     }
 

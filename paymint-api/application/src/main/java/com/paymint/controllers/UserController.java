@@ -4,7 +4,6 @@ import com.paymint.converters.UserRequestConverter;
 import com.paymint.models.entities.User;
 import com.paymint.services.UserService;
 import com.paymint.data.dtos.UserDTO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +14,14 @@ import java.util.List;
 @PreAuthorize("denyAll()")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/getUsers")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("permitAll()")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
