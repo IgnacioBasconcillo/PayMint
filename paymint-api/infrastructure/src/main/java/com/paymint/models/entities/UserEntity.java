@@ -37,7 +37,16 @@ public class UserEntity {
     private String Phone;
 
     @Column(nullable = false)
-    private String Address;
+    private String City;
+
+    @Column(nullable = false)
+    private String PostalCode;
+
+    @Column(nullable = false)
+    private String Country;
+
+    @Column(nullable = false)
+    private String Street;
 
     @Column(nullable = false)
     private String Role;
@@ -114,12 +123,36 @@ public class UserEntity {
         Phone = phone;
     }
 
-    public String getAddress() {
-        return Address;
+    public String getCity() {
+        return City;
     }
 
-    public void setAddress(String address) {
-        Address = address;
+    public void setCity(String city) {
+        City = city;
+    }
+
+    public String getPostalCode() {
+        return PostalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        PostalCode = postalCode;
+    }
+
+    public String getCountry() {
+        return Country;
+    }
+
+    public void setCountry(String country) {
+        Country = country;
+    }
+
+    public String getStreet() {
+        return Street;
+    }
+
+    public void setStreet(String street) {
+        Street = street;
     }
 
     public String getRole() {
