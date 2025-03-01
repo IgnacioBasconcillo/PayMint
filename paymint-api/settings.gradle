@@ -1,3 +1,4 @@
 rootProject.name = 'paymint-api'
 include 'application', 'infrastructure', 'domain', 'boot'
+include 'common'
 
