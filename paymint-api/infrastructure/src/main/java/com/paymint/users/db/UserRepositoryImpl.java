@@ -14,28 +14,27 @@ import java.util.stream.Collectors;
 @Repository
 public class UserRepositoryImpl implements UserRepository {
 
-    private final JpaUserRepository jpaUserRepository;
+  private final JpaUserRepository jpaUserRepository;
 
-    public UserRepositoryImpl(JpaUserRepository jpaUserRepository) {
-        this.jpaUserRepository = jpaUserRepository;
-    }
+  public UserRepositoryImpl(JpaUserRepository jpaUserRepository) {
+    this.jpaUserRepository = jpaUserRepository;
+  }
 
-    @Override
-    public void createUser(User user) {
-        UserEntity userEntity = UserEntityMapper.toEntity(user);
-        jpaUserRepository.save(userEntity);
-    }
+  @Override
+  public void createUser(User user) {
+    UserEntity userEntity = UserEntityMapper.toEntity(user);
+    jpaUserRepository.save(userEntity);
+  }
 
-    @Override
-    public List<User> getAllUsers() {
-        return jpaUserRepository.findAll()
-                .stream()
-                .map(UserEntityMapper::toDomain)
-                .collect(Collectors.toList());
-    }
+  @Override
+  public List<User> getAllUsers() {
+    return jpaUserRepository.findAll().stream()
+        .map(UserEntityMapper::toDomain)
+        .collect(Collectors.toList());
+  }
 
-    @Override
-    public Optional<User> getUserById(String id) {
-        return jpaUserRepository.findById(Long.valueOf(id)).map(UserEntityMapper::toDomain);
-    }
+  @Override
+  public Optional<User> getUserById(String id) {
+    return jpaUserRepository.findById(Long.valueOf(id)).map(UserEntityMapper::toDomain);
+  }
 }
