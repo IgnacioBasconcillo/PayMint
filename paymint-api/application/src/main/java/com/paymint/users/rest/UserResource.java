@@ -1,10 +1,12 @@
 package com.paymint.users.rest;
 
 import com.paymint.concepts.messaging.MessagePublisher;
+import com.paymint.concepts.query.QueryBus;
 import com.paymint.id.Id;
 import com.paymint.users.command.CreateUserCommand;
-import com.paymint.users.converters.UserConverterService;
 import com.paymint.users.models.entities.User;
+import com.paymint.users.query.GetAllUsersQuery;
+import com.paymint.users.query.GetUserByIdQuery;
 import com.paymint.users.services.UserService;
 import com.paymint.users.dto.UserDTO;
 import org.slf4j.Logger;
@@ -33,19 +35,21 @@ public class UserResource {
     MessagePublisher.execute(new CreateUserCommand(transactionId, userDTO));
 
     LOGGER.info("User creation command published with transaction ID: {}", transactionId);
-    return ResponseEntity.ok("User created successfully");
+    return ResponseEntity.ok("Order processed successfully");
   }
 
   @GetMapping("/{id}")
   @PreAuthorize("hasRole('USER')")
   public User getUserById(@PathVariable String id) {
-    return userService.getUserById(id);
+    LOGGER.info("Fetching user with ID: {}", id);
+    return QueryBus.execute(new GetUserByIdQuery(id));
   }
 
   @GetMapping("/getUsers")
   @PreAuthorize("permitAll()")
   public List<User> getAllUsers() {
-    return userService.getAllUsers();
+    LOGGER.info("Fetching all users");
+    return QueryBus.execute(new GetAllUsersQuery());
   }
 
   @PutMapping("/{id}")
