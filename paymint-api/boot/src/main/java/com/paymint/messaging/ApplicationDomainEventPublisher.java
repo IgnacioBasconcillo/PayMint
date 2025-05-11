@@ -9,17 +9,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ApplicationDomainEventPublisher implements DomainEventPublisher {
-    private static final Logger LOGGER = LoggerFactory.getLogger(DomainEventPublisher.class.getName());
+  private static final Logger LOGGER =
+      LoggerFactory.getLogger(DomainEventPublisher.class.getName());
 
-    private final ApplicationEventPublisher applicationEventPublisher;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
-    public ApplicationDomainEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
-        this.applicationEventPublisher = applicationEventPublisher;
-    }
+  public ApplicationDomainEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+    this.applicationEventPublisher = applicationEventPublisher;
+  }
 
-    @Override
-    public void publish(final DomainEvent domainEvent){
-        applicationEventPublisher.publishEvent(domainEvent);
-        LOGGER.debug("Domain event published: {}", domainEvent);
-    }
+  @Override
+  public void publish(final DomainEvent domainEvent) {
+    applicationEventPublisher.publishEvent(domainEvent);
+    LOGGER.debug("Domain event published: {}", domainEvent);
+  }
 }

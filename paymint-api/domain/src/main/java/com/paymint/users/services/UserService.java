@@ -1,8 +1,6 @@
 package com.paymint.users.services;
 
-import com.paymint.users.models.entities.User;
-
-import java.util.List;
+import com.paymint.users.model.entities.User;
 
 public interface UserService {
   void createUser(User user);

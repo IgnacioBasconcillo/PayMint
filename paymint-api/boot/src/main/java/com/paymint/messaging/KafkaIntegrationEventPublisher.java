@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class KafkaIntegrationEventPublisher implements IntegrationEventPublisher {
 
-    @Override
-    public void publish(final IntegrationEvent event){}
+  @Override
+  public void publish(final IntegrationEvent event) {}
 }

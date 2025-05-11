@@ -19,8 +19,8 @@ public class ApplicationDomainCommandExecutor implements DomainCommandExecutor {
   }
 
   @Override
-    public void execute (DomainCommand command){
-      applicationEventPublisher.publishEvent(command);
-      LOGGER.debug("Command executed: {}", command);
+  public void execute(DomainCommand command) {
+    applicationEventPublisher.publishEvent(command);
+    LOGGER.debug("Command executed: {}", command);
   }
 }

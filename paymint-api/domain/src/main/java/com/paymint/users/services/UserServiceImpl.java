@@ -1,9 +1,7 @@
 package com.paymint.users.services;
 
-import com.paymint.users.models.entities.User;
-import com.paymint.users.repositories.UserRepository;
-
-import java.util.List;
+import com.paymint.users.model.entities.User;
+import com.paymint.users.ports.repositories.UserRepository;
 
 public class UserServiceImpl implements UserService {
 
