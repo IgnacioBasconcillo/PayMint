@@ -1,8 +1,8 @@
 package com.paymint.configuration;
 
-import com.paymint.users.ports.repositories.UserRepository;
-import com.paymint.users.services.UserService;
-import com.paymint.users.services.UserServiceImpl;
+import com.paymint.user.ports.repositories.UserRepository;
+import com.paymint.user.services.UserService;
+import com.paymint.user.services.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

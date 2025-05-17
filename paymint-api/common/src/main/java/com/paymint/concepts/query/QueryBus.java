@@ -1,5 +1,7 @@
 package com.paymint.concepts.query;
 
+import com.paymint.exceptions.PaymintException;
+
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -17,7 +19,7 @@ public final class QueryBus {
   }
 
   @SuppressWarnings("unchecked")
-  public static <Q, R> R execute(Q query) {
+  public static <Q, R> R execute(Q query) throws PaymintException {
     DomainQueryHandler<Q, R> handler = (DomainQueryHandler<Q, R>) handlers.get(query.getClass());
     if (handler == null) {
       throw new RuntimeException("No handler found for query: " + query.getClass().getName());
