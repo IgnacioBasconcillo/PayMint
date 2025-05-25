@@ -6,6 +6,8 @@ import com.paymint.user.converters.DTOToUserConverterPort;
 import com.paymint.exceptions.PaymintException;
 import com.paymint.user.dto.UserInputDTO;
 import com.paymint.user.model.aggregates.User;
+import com.paymint.user.model.enums.AccountStatus;
+import com.paymint.user.model.enums.RoleType;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

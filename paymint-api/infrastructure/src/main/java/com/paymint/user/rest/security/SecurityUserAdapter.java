@@ -1,7 +1,7 @@
 package com.paymint.user.rest.security;
 
 import com.paymint.user.model.aggregates.User;
-import com.paymint.user.model.valueobjects.AccountStatus;
+import com.paymint.user.model.enums.AccountStatus;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

@@ -1,8 +1,12 @@
 package com.paymint.user.model.aggregates;
 
 import com.paymint.concepts.ddd.Entity;
-import com.paymint.paymentmethod.model.aggregates.PaymentMethod;
+import com.paymint.user.model.entities.Merchant;
+import com.paymint.user.model.entities.PaymentMethod;
 import com.paymint.user.model.valueobjects.*;
+import com.paymint.user.model.enums.AccountStatus;
+import com.paymint.user.model.enums.RoleType;
+import com.paymint.user.model.valueobjects.paymentmethod.PaymentMethodId;
 
 import java.util.*;
 
@@ -17,31 +21,33 @@ public class User implements Entity {
   private Password password;
   private PhoneNumber phoneNumber;
   private Address address;
-  private RoleType roleType;
-
-  private final Set<PaymentMethod> paymentMethods = new HashSet<>();
+  private Set<RoleType> roleType;
+  private final List<PaymentMethod> paymentMethods = new ArrayList<>();
+  private final Optional<Merchant> merchant;
 
   public User(
       UserId id,
-      AccountStatus accountStatus,
       DateOfBirth dateOfBirth,
       NationalId nationalId,
       Email email,
-      Name name,
-      Password password,
-      PhoneNumber phoneNumber,
+      Optional<Merchant> merchant,
+      Set<RoleType> roleType,
       Address address,
-      RoleType roleType) {
-    this.id = Objects.requireNonNull(id);
-    this.accountStatus = Objects.requireNonNull(accountStatus);
-    this.dateOfBirth = Objects.requireNonNull(dateOfBirth);
-    this.nationalId = Objects.requireNonNull(nationalId);
-    this.email = Objects.requireNonNull(email);
-    this.name = Objects.requireNonNull(name);
-    this.password = Objects.requireNonNull(password);
-    this.phoneNumber = Objects.requireNonNull(phoneNumber);
-    this.address = Objects.requireNonNull(address);
-    this.roleType = Objects.requireNonNull(roleType);
+      PhoneNumber phoneNumber,
+      Password password,
+      Name name,
+      AccountStatus accountStatus) {
+    this.id = id;
+    this.dateOfBirth = dateOfBirth;
+    this.nationalId = nationalId;
+    this.email = email;
+    this.merchant = merchant;
+    this.roleType = roleType;
+    this.address = address;
+    this.phoneNumber = phoneNumber;
+    this.password = password;
+    this.name = name;
+    this.accountStatus = accountStatus;
   }
 
   public UserId getId() {
@@ -68,7 +74,7 @@ public class User implements Entity {
     return address;
   }
 
-  public RoleType getRole() {
+  public Set<RoleType> getRole() {
     return roleType;
   }
 
@@ -84,12 +90,12 @@ public class User implements Entity {
     return nationalId;
   }
 
-  public RoleType getRoleType() {
+  public Set<RoleType> getRoleType() {
     return roleType;
   }
 
-  public Set<PaymentMethod> getPaymentMethods() {
-    return Collections.unmodifiableSet(paymentMethods);
+  public List<PaymentMethod> getPaymentMethods() {
+    return paymentMethods;
   }
 
   public boolean isActive() {
@@ -119,26 +125,48 @@ public class User implements Entity {
     this.password = Objects.requireNonNull(newPassword);
   }
 
-  public void addPaymentMethod(PaymentMethod method) {
-    Objects.requireNonNull(method);
-    if (paymentMethods.contains(method)) {
-      throw new IllegalStateException("Payment method already exists.");
-    }
-    this.paymentMethods.add(method);
-    // domainEvents.add(new PaymentMethodAddedEvent(this.id, method.getId()));
+  public boolean isCustomer() {
+    return roleType.contains(RoleType.CUSTOMER);
   }
 
-  public void removePaymentMethod(PaymentMethod method) {
-    this.paymentMethods.remove(method);
-    // domainEvents.add(new PaymentMethodRemovedEvent(...));
+  public void addPaymentMethod(PaymentMethod method) {
+    Objects.requireNonNull(method);
+
+    if (method.getExpiryDate().isExpired()) {
+      throw new IllegalArgumentException("Expired payment method cannot be added.");
+    }
+
+    if (paymentMethods.stream()
+        .anyMatch(existing -> existing.getMethodId().equals(method.getMethodId()))) {
+      throw new IllegalArgumentException("The payment method already exists.");
+    }
+
+    if (paymentMethods.stream()
+        .anyMatch(
+            existing -> existing.getMaskedCardNumber().equals(method.getMaskedCardNumber()))) {
+      throw new IllegalArgumentException("The masked card number already exists.");
+    }
+
+    paymentMethods.add(method);
+  }
+
+  public void removePaymentMethod(PaymentMethodId methodId) {
+    boolean removed = paymentMethods.removeIf(pm -> pm.getMethodId().equals(methodId));
+    if (!removed) {
+      throw new IllegalArgumentException("Payment method not found: " + methodId);
+    }
+  }
+
+  public List<PaymentMethod> getActivePaymentMethods() {
+    return paymentMethods.stream().filter(PaymentMethod::isActive).toList();
+  }
+
+  public List<PaymentMethod> getAllPaymentMethods() {
+    return List.copyOf(paymentMethods);
   }
 
   public boolean isMerchant() {
-    return roleType == RoleType.MERCHANT;
-  }
-
-  public boolean isCustomer() {
-    return roleType == RoleType.CUSTOMER;
+    return roleType.contains(RoleType.MERCHANT) && merchant.isPresent();
   }
 
   @Override

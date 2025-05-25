@@ -3,6 +3,8 @@ package com.paymint.user.adapter.db.mappers;
 import com.paymint.user.adapter.db.entities.UserEntity;
 import com.paymint.user.model.aggregates.User;
 import com.paymint.user.model.valueobjects.*;
+import com.paymint.user.model.enums.AccountStatus;
+import com.paymint.user.model.enums.RoleType;
 
 import java.time.LocalDate;
 
