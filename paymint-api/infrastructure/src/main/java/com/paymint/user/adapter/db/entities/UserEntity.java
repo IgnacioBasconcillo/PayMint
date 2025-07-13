@@ -50,6 +50,9 @@ public class UserEntity {
   @Column(nullable = false)
   private String role;
 
+  @Column(nullable = false)
+  private String merchant;
+
   public String getId() {
     return id;
   }

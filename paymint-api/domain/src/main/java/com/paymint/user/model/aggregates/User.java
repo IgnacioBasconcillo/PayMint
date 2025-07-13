@@ -1,12 +1,9 @@
 package com.paymint.user.model.aggregates;
 
 import com.paymint.concepts.ddd.Entity;
-import com.paymint.user.model.entities.Merchant;
-import com.paymint.user.model.entities.PaymentMethod;
 import com.paymint.user.model.valueobjects.*;
 import com.paymint.user.model.enums.AccountStatus;
 import com.paymint.user.model.enums.RoleType;
-import com.paymint.user.model.valueobjects.paymentmethod.PaymentMethodId;
 
 import java.util.*;
 
@@ -22,32 +19,30 @@ public class User implements Entity {
   private PhoneNumber phoneNumber;
   private Address address;
   private Set<RoleType> roleType;
-  private final List<PaymentMethod> paymentMethods = new ArrayList<>();
-  private final Optional<Merchant> merchant;
+
+  /*  private final List<PaymentMethod> paymentMethods = new ArrayList<>();*/
 
   public User(
       UserId id,
+      AccountStatus accountStatus,
       DateOfBirth dateOfBirth,
       NationalId nationalId,
       Email email,
-      Optional<Merchant> merchant,
-      Set<RoleType> roleType,
       Address address,
       PhoneNumber phoneNumber,
       Password password,
       Name name,
-      AccountStatus accountStatus) {
+      Set<RoleType> roleType) {
     this.id = id;
+    this.accountStatus = accountStatus;
     this.dateOfBirth = dateOfBirth;
     this.nationalId = nationalId;
     this.email = email;
-    this.merchant = merchant;
-    this.roleType = roleType;
     this.address = address;
     this.phoneNumber = phoneNumber;
     this.password = password;
     this.name = name;
-    this.accountStatus = accountStatus;
+    this.roleType = roleType;
   }
 
   public UserId getId() {
@@ -94,9 +89,9 @@ public class User implements Entity {
     return roleType;
   }
 
-  public List<PaymentMethod> getPaymentMethods() {
+  /*  public List<PaymentMethod> getPaymentMethods() {
     return paymentMethods;
-  }
+  }*/
 
   public boolean isActive() {
     return accountStatus == AccountStatus.ACTIVE;
@@ -129,7 +124,7 @@ public class User implements Entity {
     return roleType.contains(RoleType.CUSTOMER);
   }
 
-  public void addPaymentMethod(PaymentMethod method) {
+  /*  public void addPaymentMethod(PaymentMethod method) {
     Objects.requireNonNull(method);
 
     if (method.getExpiryDate().isExpired()) {
@@ -163,11 +158,7 @@ public class User implements Entity {
 
   public List<PaymentMethod> getAllPaymentMethods() {
     return List.copyOf(paymentMethods);
-  }
-
-  public boolean isMerchant() {
-    return roleType.contains(RoleType.MERCHANT) && merchant.isPresent();
-  }
+  }*/
 
   @Override
   public boolean equals(Object o) {

@@ -28,7 +28,7 @@ public class UserToUserDTOConverterAdapter implements UserToDTOConverterPort {
     userSummaryDTO.setCity(user.getAddress().city());
     userSummaryDTO.setPostalCode(user.getAddress().postalCode());
     userSummaryDTO.setCountry(user.getAddress().country());
-    userSummaryDTO.setRole(user.getRole().name());
+    userSummaryDTO.setRole(user.getRole().toString());
 
     return userSummaryDTO;
   }

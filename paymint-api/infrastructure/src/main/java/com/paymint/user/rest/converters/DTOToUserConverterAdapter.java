@@ -10,6 +10,8 @@ import com.paymint.user.model.enums.AccountStatus;
 import com.paymint.user.model.enums.RoleType;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -23,19 +25,19 @@ public class DTOToUserConverterAdapter implements DTOToUserConverterPort {
 
   private User userRequestToDomain(UserInputDTO userRequest) {
     return new User(
-        new UserId(UUID.randomUUID().toString()),
+        UserId.generate(),
         AccountStatus.valueOf(userRequest.getAccountStatus()),
         new DateOfBirth(userRequest.getDateOfBirth()),
         new NationalId(userRequest.getNationalId()),
         new Email(userRequest.getEmail()),
-        new Name(userRequest.getName()),
-        new Password(userRequest.getPassword()),
-        new PhoneNumber(userRequest.getPhoneNumber()),
         new Address(
             userRequest.getStreet(),
             userRequest.getCity(),
             userRequest.getPostalCode(),
             userRequest.getCountry()),
-        RoleType.valueOf(userRequest.getRole()));
+        new PhoneNumber(userRequest.getPhoneNumber()),
+        new Password(userRequest.getPassword()),
+        new Name(userRequest.getName()),
+        Set.of(RoleType.valueOf(userRequest.getRole())));
   }
 }
